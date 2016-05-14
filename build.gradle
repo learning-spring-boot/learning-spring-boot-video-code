@@ -1,20 +1,21 @@
 buildscript {
 	ext {
-		springBootVersion = '1.4.0.M2'
+		springBootVersion = '1.3.3.RELEASE'
 	}
 	repositories {
 		mavenCentral()
-		maven { url "https://repo.spring.io/snapshot" }
-		maven { url "https://repo.spring.io/milestone" }
+		maven { url "https://plugins.gradle.org/m2/" }
+//		maven { url "https://repo.spring.io/snapshot" }
+//		maven { url "https://repo.spring.io/milestone" }
 	}
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'spring-boot' 
+apply plugin: 'spring-boot'
 
 jar {
 	baseName = 'learning-spring-boot-video'
@@ -32,10 +33,14 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('org.springframework.boot:spring-boot-starter-hateoas')
-	compile('org.springframework.boot:spring-boot-starter-security')
+//	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-websocket')
+	compile('org.springframework.boot:spring-boot-devtools')
+	compile('org.springframework.boot:spring-boot-actuator')
+	compile('org.webjars:requirejs:2.2.0')
+	compile('org.webjars.npm:stompjs:2.3.3')
+	compile('org.webjars.bower:sockjs-client:1.1.0')
 	runtime('com.h2database:h2')
 	testCompile('org.springframework.boot:spring-boot-starter-test') 
 }
