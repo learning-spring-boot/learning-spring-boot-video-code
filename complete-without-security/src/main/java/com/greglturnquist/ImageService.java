@@ -57,10 +57,6 @@ public class ImageService {
 		return repository.findAll(pageable);
 	}
 
-	public Image findOne(String filename) {
-		return repository.findByName(filename);
-	}
-
 	public Resource findOneImage(String filename) {
 		return ctx.getResource("file:" + UPLOAD_ROOT + "/" + filename);
 	}
