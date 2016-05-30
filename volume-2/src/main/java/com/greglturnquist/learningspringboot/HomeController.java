@@ -17,9 +17,6 @@ package com.greglturnquist.learningspringboot;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -33,15 +30,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * @author Greg Turnquist
  */
 @Controller
 public class HomeController {
-
-	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
 	private static final String BASE_PATH = "/images";
 	private static final String FILENAME = "{filename:.+}";
@@ -55,15 +49,14 @@ public class HomeController {
 
 	@RequestMapping(method = RequestMethod.POST, value = BASE_PATH)
 	@ResponseBody
-	public ResponseEntity<?> createFile(@RequestParam("file") MultipartFile file,
-							 RedirectAttributes redirectAttributes) {
+	public ResponseEntity<?> createFile(@RequestParam("file") MultipartFile file) {
+
 		try {
 			imageService.createImage(file);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT)
 					.header(HttpHeaders.LOCATION, BASE_PATH + "/" + file.getOriginalFilename() + "/raw")
 					.body("Successfully uploaded " + file.getOriginalFilename());
 		} catch (IOException e) {
-			log.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Failed to upload " + file.getName() + " => " + e.getMessage());
 		}
@@ -71,13 +64,12 @@ public class HomeController {
 
 	@RequestMapping(method = RequestMethod.DELETE, value = BASE_PATH + "/" + FILENAME)
 	@ResponseBody
-	public ResponseEntity<?> deleteFile(@PathVariable String filename,
-							 RedirectAttributes redirectAttributes) {
+	public ResponseEntity<?> deleteFile(@PathVariable String filename) {
+
 		try {
 			imageService.deleteImage(filename);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Successfully deleted " + filename);
 		} catch (IOException e) {
-			log.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Failed to delete " + filename + " => " + e.getMessage());
 		}
@@ -86,6 +78,7 @@ public class HomeController {
 	@RequestMapping(method = RequestMethod.GET, value = BASE_PATH + "/" + FILENAME + "/raw")
 	@ResponseBody
 	public ResponseEntity<?> oneRawImage(@PathVariable String filename) {
+
 		org.springframework.core.io.Resource file = imageService.findOneImage(filename);
 		try {
 			return ResponseEntity.ok()
@@ -93,7 +86,6 @@ public class HomeController {
 					.contentType(MediaType.IMAGE_JPEG)
 					.body(new InputStreamResource(file.getInputStream()));
 		} catch (IOException e) {
-			log.error(e.getMessage());
 			return ResponseEntity.badRequest()
 					.body("Couldn't find " + filename + " => " + e.getMessage());
 		}

@@ -75,6 +75,7 @@ public class ImageService {
 	CommandLineRunner setUp() {
 		return (args) -> {
 			FileSystemUtils.deleteRecursively(new File(UPLOAD_ROOT));
+
 			new File(UPLOAD_ROOT).mkdir();
 
 			FileCopyUtils.copy("Test file", new FileWriter(UPLOAD_ROOT + "/test"));
