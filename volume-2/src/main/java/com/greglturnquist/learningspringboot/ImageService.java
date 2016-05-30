@@ -23,11 +23,9 @@ import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.FileSystemUtils;
@@ -42,23 +40,21 @@ public class ImageService {
 	private static String UPLOAD_ROOT = "upload-dir";
 
 	private final ImageRepository repository;
-	private final ApplicationContext ctx;
+	private final ResourceLoader resourceLoader;
 
 	@Autowired
-	public ImageService(ImageRepository repository, ApplicationContext ctx) {
-		this.repository = repository;
-		this.ctx = ctx;
-	}
+	public ImageService(ImageRepository repository, ResourceLoader resourceLoader) {
 
-	public Page<Image> findPage(Pageable pageable) {
-		return repository.findAll(pageable);
+		this.repository = repository;
+		this.resourceLoader = resourceLoader;
 	}
 
 	public Resource findOneImage(String filename) {
-		return ctx.getResource("file:" + UPLOAD_ROOT + "/" + filename);
+		return resourceLoader.getResource("file:" + UPLOAD_ROOT + "/" + filename);
 	}
 
 	public void createImage(MultipartFile file) throws IOException {
+
 		if (!file.isEmpty()) {
 			Files.copy(file.getInputStream(), Paths.get(UPLOAD_ROOT, file.getOriginalFilename()));
 			repository.save(new Image(file.getOriginalFilename()));
@@ -66,13 +62,20 @@ public class ImageService {
 	}
 
 	public void deleteImage(String filename) throws IOException {
+
 		final Image byName = repository.findByName(filename);
 		repository.delete(byName);
 		Files.deleteIfExists(Paths.get(UPLOAD_ROOT, filename));
 	}
 
+	/**
+	 * Pre-load some fake images
+	 *
+	 * @return Spring Boot {@link CommandLineRunner} automatically run after app context is loaded.
+	 */
 	@Bean
 	CommandLineRunner setUp() {
+
 		return (args) -> {
 			FileSystemUtils.deleteRecursively(new File(UPLOAD_ROOT));
 
