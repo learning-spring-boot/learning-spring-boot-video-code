@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -79,8 +80,8 @@ public class HomeController {
 	@ResponseBody
 	public ResponseEntity<?> oneRawImage(@PathVariable String filename) {
 
-		org.springframework.core.io.Resource file = imageService.findOneImage(filename);
 		try {
+			Resource file = imageService.findOneImage(filename);
 			return ResponseEntity.ok()
 					.contentLength(file.contentLength())
 					.contentType(MediaType.IMAGE_JPEG)
