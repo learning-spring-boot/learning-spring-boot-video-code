@@ -30,7 +30,7 @@ public class Image {
 
 	private String name;
 
-	protected Image() {}
+	private Image() {}
 
 	public Image(String name) {
 		this.name = name;
@@ -51,5 +51,4 @@ public class Image {
 	public void setName(String name) {
 		this.name = name;
 	}
-
 }

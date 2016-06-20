@@ -74,12 +74,12 @@ public class ImageService {
 	 * @return Spring Boot {@link CommandLineRunner} automatically run after app context is loaded.
 	 */
 	@Bean
-	CommandLineRunner setUp() {
+	CommandLineRunner setUp(ImageRepository repository) throws IOException {
 
 		return (args) -> {
 			FileSystemUtils.deleteRecursively(new File(UPLOAD_ROOT));
 
-			new File(UPLOAD_ROOT).mkdir();
+			Files.createDirectory(Paths.get(UPLOAD_ROOT));
 
 			FileCopyUtils.copy("Test file", new FileWriter(UPLOAD_ROOT + "/test"));
 			repository.save(new Image("test"));
@@ -90,7 +90,7 @@ public class ImageService {
 			FileCopyUtils.copy("Test file3", new FileWriter(UPLOAD_ROOT + "/test3"));
 			repository.save(new Image("test3"));
 		};
-	}
 
+	}
 
 }
