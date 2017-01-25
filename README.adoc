@@ -1,0 +1,11 @@
+This is the source code for http://greglturnquist.com/learning-spring-boot[Learning Spring Boot Video].
+
+To get your copy, please visit the link at the top.
+
+It's currently written against Spring Boot 1.3.5.RELEASE.
+
+Interested in learning how to use Spring Boot 2 + Spring 5? Want to see how to build _reactive_ applications using Boot's new Project Reactor support?
+
+Pre-order your copy of https://www.amazon.com/Learning-Spring-Boot-Greg-Turnquist-ebook/dp/B01LPRN0Z8/ref=sr_1_1?ie=UTF8&qid=1478899686&sr=8-1[Learning Spring Boot 2nd Edition].
+
+Don't forget to http://greglturnquist.com/list[sign up for updates].
